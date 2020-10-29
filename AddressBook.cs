@@ -5,6 +5,7 @@
 // <creator Name="Dheer Singh Meena"/>
 // --------------------------------------------------------------------------------------------------------------------
 using CsvHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -79,7 +80,7 @@ namespace AddressBookSystemFileIO_Day_21
                 if (cc.name.Equals(ename))
                 {
                     flag = true;
-                    cc.phoneNo=newnumber;
+                    cc.phoneNo = newnumber;
                     Console.WriteLine("Number edited successfully");
                     break;
                 }
@@ -214,35 +215,27 @@ namespace AddressBookSystemFileIO_Day_21
         }
 
         /// <summary>
-        /// UC14 Ability to read or write  the address book with person contact as CSV file.
+        /// UC15 Ability to read or write  the address book with person contact as Jsonfile.
         /// </summary>
-       public void CSVReadAllText()
+        public void JsonReadAllText()
         {
             //Initializing variable to store file path.
-            string importFilePath = @"C:\Users\dheer1998meena\source\repos\AddressBookSystemFileIO_Day-21\AddressBookSystemFileIO_Day-21\CSV\import.csv";
-            // Reading csv file.
-            //Converting import file to stream byte and storing in reader streamReader
-            using (var streamReader = new StreamReader(importFilePath) )
-                // Here accesing the csv file and read the data reader in csv variable.
-                using(var csv = new CsvReader(streamReader ,CultureInfo.InvariantCulture))
+            string importFilePath = @"C:\Users\dheer1998meena\source\repos\AddressBookSystemFileIO_Day-21\AddressBookSystemFileIO_Day-21\Json\export.json";
+            IList<Contact> lists = JsonConvert.DeserializeObject<List<Contact>>(File.ReadAllText(importFilePath));
+            //Iterating using foreach loop contact data in lists.
+            foreach (Contact contact in lists)
             {
-                Console.WriteLine("Read data from AddressBook.cs");
-                // here reading the data and getting the lists from csv file.
-                var lists = csv.GetRecords<Contact>().ToList();
-                //Iterating using foreach loop contact data in lists.
-                foreach(Contact contact in lists)
-                {
-                    Console.WriteLine("Name :" + contact.name);
-                    Console.WriteLine("Address :" + contact.address);
-                    Console.WriteLine("City :" + contact.city);
-                    Console.WriteLine("State :" + contact.state);
-                    Console.WriteLine("Zip :" + contact.zip);
-                    Console.WriteLine("Contact no. :" + contact.phoneNo);
-                    Console.WriteLine("Email :" + contact.email);
-                    Console.WriteLine();
-                }
+                Console.WriteLine("Name :" + contact.name);
+                Console.WriteLine("Address :" + contact.address);
+                Console.WriteLine("City :" + contact.city);
+                Console.WriteLine("State :" + contact.state);
+                Console.WriteLine("Zip :" + contact.zip);
+                Console.WriteLine("Contact no. :" + contact.phoneNo);
+                Console.WriteLine("Email :" + contact.email);
+                Console.WriteLine();
             }
         }
     }
+}    
     
-}
+
