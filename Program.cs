@@ -5,6 +5,7 @@
 // <creator Name="Dheer Singh Meena"/>
 // --------------------------------------------------------------------------------------------------------------------
 using CsvHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -245,24 +246,25 @@ namespace AddressBookSystemFileIO_Day_21
                 {
                     ab.AddressByState();
                 }
-                // UC14 Ability to read or write  the address book with person contact as CSV file.
+                // UC15 Ability to read or write  the address book with person contact as Json file.
                 else if (choice == 9)
                 {
-                    // Checking the file path
-                    string exportFilePath = @"C:\Users\dheer1998meena\source\repos\AddressBookSystemFileIO_Day-21\AddressBookSystemFileIO_Day-21\CSV\export.csv";
-                    if(File.Exists(exportFilePath))
+                    //Initializing variable to store file path.
+                    string exportFilePath = @"C:\Users\dheer1998meena\source\repos\AddressBookSystemFileIO_Day-21\AddressBookSystemFileIO_Day-21\Json\export.json";
+                    if (File.Exists(exportFilePath))
                     {
+                        Newtonsoft.Json.JsonSerializer ser = new Newtonsoft.Json.JsonSerializer();
                         using(var writer = new StreamWriter(exportFilePath))
-                            using(CsvWriter csvWriter = new CsvWriter(writer,CultureInfo.InvariantCulture) )
+                            using(JsonWriter jsonWriter = new JsonTextWriter(writer) )
                         {
                             // Storing all the details of the contacts into a list
                             List<Contact> li = ab.ViewAddressBook(1);
-                            csvWriter.WriteRecords(li);
+                            ser.Serialize(writer, li);
                         }
 
                     }
                     // Reading all text from the file
-                    ab.CSVReadAllText();
+                    ab.JsonReadAllText();
                 }
                 else
                 {
